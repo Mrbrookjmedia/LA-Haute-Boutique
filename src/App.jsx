@@ -15,6 +15,11 @@ import { ToastContainer } from "react-toastify";
 
 // Lazy loading all route components
 const Home = lazy(() => import("./components/Home"));
+const About = lazy(() => import("./pages/About.jsx"));
+const AiTools = lazy(() => import("./pages/AiTools.jsx"));
+const Collections = lazy(() => import("./pages/Collections.jsx"));
+const Shop = lazy(() => import("./pages/Shop.jsx"));
+const Support = lazy(() => import("./pages/Support.jsx"));
 
 
 
@@ -35,6 +40,11 @@ function AppContent(){
     <main className="main">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/aitools" element={<AiTools />} />
+            <Route path="/collections" element={<Collections />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/support" element={<Support />} />
             </Routes>
             <Footer />
             </main>

@@ -1,12 +1,12 @@
 import { BsCart , BsPerson } from "react-icons/bs";
-
+import logo from "../assets/images/logoLA.png";
 function Navbar(){
     return(
         <> 
         <section>
             <div className="Navbar mt-5 flex justify-evenly h-{108} w-full ">
                 <div className="">
-                    <a href=""> La-Haute Boutique</a>
+                 <a href="/"> <img className="mt-2" src={logo} alt="logo" />  </a>
                 </div>
                 <div className=" w-[60%] text-lg flex justify-evenly gap-2">
                     <a href="" className=" hover:text-blue-700 hover:font-bold">Home</a>
