@@ -11,11 +11,11 @@ function Footer() {
 // categories for the footer element product categories
 
     const categories = [
-        "Electronics",
-        "Clothing",
-        "Home Appliances",
-        "Books",
-        "Sports Equipment",
+        "Bags",
+        "Shoes",
+        "Apparel",
+        "Accessories",
+         
     ];
 
 

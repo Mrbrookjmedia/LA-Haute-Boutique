@@ -1,5 +1,7 @@
 import { BsCart , BsPerson } from "react-icons/bs";
 import logo from "../assets/images/logoLA.png";
+import { Link, NavLink } from "react-router-dom";
+
 function Navbar(){
     return(
         <> 
@@ -9,12 +11,13 @@ function Navbar(){
                  <a href="/"> <img className="mt-2" src={logo} alt="logo" />  </a>
                 </div>
                 <div className=" w-[60%] text-lg flex justify-evenly gap-2">
-                    <a href="" className=" hover:text-blue-700 hover:font-bold">Home</a>
-                    <a href="" className=" hover:text-blue-700 hover:font-bold">Shop</a>
-                    <a href="" className=" hover:text-blue-700 hover:font-bold">Collections</a>
-                    <a href="" className=" hover:text-blue-700 hover:font-bold">AI-Powered Personalization</a>
-                    <a href="" className=" hover:text-blue-700 hover:font-bold">About Us</a>
-                    <a href="" className=" hover:text-blue-700 hover:font-bold">Support</a>
+
+                    <NavLink to="/" className=" hover:text-blue-700 hover:font-bold" >Home</NavLink>
+                    <NavLink to="/shop" className=" hover:text-blue-700 hover:font-bold" >Shop</NavLink>
+                    <NavLink to="/collections" className=" hover:text-blue-700 hover:font-bold" >Collections</NavLink>
+                    <NavLink to="/aitools" className=" hover:text-blue-700 hover:font-bold" >AI-Powered Personalization</NavLink>
+                    <NavLink to="/about" className=" hover:text-blue-700 hover:font-bold" >About Us</NavLink>
+                    <NavLink to="/support" className=" hover:text-blue-700 hover:font-bold" >Support</NavLink>
                 </div>
                 <div className="flex gap-8">
                     <BsPerson size={32} color="" className="border-2 rounded-md" ></BsPerson>

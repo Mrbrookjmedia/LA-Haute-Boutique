@@ -3,7 +3,6 @@ import bannerImaege from "../assets/images/shopHero.svg"
 
 
 
-
 export default function Banner() {
 
     return (
