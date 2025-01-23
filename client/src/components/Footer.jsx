@@ -1,6 +1,7 @@
 "use client";
 import { BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
 import { BsPlus, BsDash } from "react-icons/bs";
+import { Link ,NavLink} from 'react-router-dom';
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
@@ -34,19 +35,23 @@ function Footer() {
 
                             <ul class="mt-6 space-y-4">
                                 <li>
-                                    <a href="#" title="" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Contact Us </a>
+                                     
+                                    <Link to="/contact" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600" >Contact Us</Link>
                                 </li>
 
                                 <li>
-                                    <a href="#" title="" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Track Order </a>
+                                <Link to="/order" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600" >Track Order</Link>
+
                                 </li>
 
                                 <li>
-                                    <a href="#" title="" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Returns and Refunds </a>
+                                <Link to="/returnsandrefunds" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600" >Returns and Refunds</Link>
+
                                 </li>
 
                                 <li>
-                                    <a href="#" title="" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> FAQ's </a>
+                                <Link to="/faq" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600" >FAQ's</Link>
+
                                 </li>
                             </ul>
                         </div>
@@ -56,11 +61,13 @@ function Footer() {
 
                             <ul class="mt-6 space-y-4">
                                 <li>
-                                    <a href="#" title="" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> About Us </a>
+                                <Link to="/about" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600" >About us</Link>
+
                                 </li>
 
                                 <li>
-                                    <a href="#" title="" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Blog </a>
+                                <Link to="/blog" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600" >Blog</Link>
+
                                 </li>
 
                             </ul>
@@ -71,19 +78,23 @@ function Footer() {
 
                             <ul class="mt-6 space-y-4">
                                 <li>
-                                    <a href="#" title="" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Terms and conditions </a>
+                                <Link to="/terms-condition" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600" >Terms and Condition</Link>
+
                                 </li>
 
                                 <li>
-                                    <a href="#" title="" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Privacy policy </a>
+                                <Link to="/policy" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600" >Privacy and Policy</Link>
+
                                 </li>
 
                                 <li>
-                                    <a href="#" title="" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Shipping Policy </a>
+                                <Link to="/shipping-policy" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600" >Shipping Policy</Link>
+
                                 </li>
 
                                 <li>
-                                    <a href="#" title="" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Site Map </a>
+                                <Link to="/site-map" class="flex text-base text-white transition-all duration-200 hover:text-blue-600 focus:text-blue-600" >Site Map</Link>
+
                                 </li>
                             </ul>
                         </div>
@@ -93,8 +104,8 @@ function Footer() {
 
                             <form action="#" method="POST" class="mt-6">
                                 <div>
-                                    <label for="email" class="sr-only">Email</label>
-                                    <input type="email" name="email" id="email" placeholder="Enter your email" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" />
+                                    <label for="email" class="sr-only" >Email</label>
+                                    <input type="email"  name="email" id="email"  placeholder="Enter your email" class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600" />
                                 </div>
 
                                 <button type="submit" class="inline-flex items-center justify-center px-6 py-4 mt-3 font-semibold text-white transition-all duration-200 bg-blue-600 rounded-md hover:bg-blue-700 focus:bg-blue-700">Subscribe</button>

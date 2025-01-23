@@ -6,7 +6,7 @@ function Navbar(){
     return(
         <> 
         <section>
-            <div className="Navbar mt-5 flex justify-evenly h-{108} w-full ">
+            <div className="Navbar mt-5 flex justify-evenly h-{108} w-full mb-5 ">
                 <div className="">
                  <a href="/"> <img className="mt-2" src={logo} alt="logo" />  </a>
                 </div>
