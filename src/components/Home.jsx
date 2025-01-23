@@ -4,6 +4,8 @@ import Banner from "./Banner";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 
+
+
 import featureImage1 from "../assets/images/featured1.png"
 import featureImage2 from "../assets/images/featured2.png"
 
@@ -15,7 +17,10 @@ import tots from "../assets/images/tots.png"
 import NewArrivalCard from "./NewArrivalCard";
 import EverydayfashionBanner from "./EverdayFashionBanner";
 import ProductCard from "./ProductCard";
+import FeedbackCarosel from "./FeedbackCarousel";
 
+import Star from "./ui/Star";
+import BigSavingZone from "./BigSavingZone";
 
 function Home() {
     return (
@@ -26,7 +31,7 @@ function Home() {
             <div className="w-full h-96 overflow-hidden">
 
                 <div className="featured_content mt-20 mb-20 flex gap-16 w-full h-[500px] translate-x-48 ">
-                    
+
                     {/* First Featured Content */}
 
                     <div className="rounded-lg relative w-[35%] h-[70%]">
@@ -38,7 +43,7 @@ function Home() {
                         </div>
                         <div className="absolute inset-0 flex items-center justify-start z-[2] pl-5">
                             <h1 className="text-white font-bold text-4xl  px-4 py-2 rounded-md">
-                            "Winter Luxe <br /> Stay Chic in the Chill"
+                                "Winter Luxe <br /> Stay Chic in the Chill"
                             </h1>
                         </div>
                     </div>
@@ -55,7 +60,7 @@ function Home() {
 
                         <div className="absolute inset-0 flex items-center justify-start z-[2] pl-5">
                             <h1 className="text-white font-bold text-3xl  px-4 py-2 rounded-md">
-                            The Eterna Collection—luxury handbags crafted with sustainable materials
+                                The Eterna Collection—luxury handbags crafted with sustainable materials
                             </h1>
                         </div>
                     </div>
@@ -71,7 +76,7 @@ function Home() {
 
             <div className=" m-16 h-auto  ">
                 <h1 className=" m-5 ml-24 font-bold text-2xl">
-                    New Arrival  
+                    New Arrival
                     <i className="bi bi-arrow-right ml-2 text-blue-600 "></i>
                 </h1>
 
@@ -80,7 +85,7 @@ function Home() {
                 <div className=" m-5  flex h-full justify-evenly">
                     {/* left arrow */}
                     <div className="flex items-center justify-center ">
-                    <i className="bi bi-arrow-left "></i>
+                        <i className="bi bi-arrow-left "></i>
                     </div>
 
                     {/* CARDs */}
@@ -93,26 +98,33 @@ function Home() {
                     </div>
                     {/* right arrow */}
                     <div className=" flex items-center justify-center">
-                    <i className="bi bi-arrow-right "></i>
+                        <i className="bi bi-arrow-right "></i>
                     </div>
 
                 </div>
-                
+
             </div>
 
             {/* new arrival section ends here */}
 
+            {/* Big Saving Zone */}
+            <BigSavingZone></BigSavingZone>
+
+            {/* Big Saving Zone ends here */}
+
+
+
             {/* Everyday fashion banner */}
 
             <EverydayfashionBanner></EverydayfashionBanner>
-            
+
 
             {/* Everyday fashion banner ends here */}
 
             {/* products */}
             <div className=" m-16 h-auto  ">
                 <h1 className="  ml-24 font-bold text-2xl">
-                    In The Limelight  
+                    In The Limelight
                     <i className="bi bi-arrow-right ml-2 text-blue-600 "></i>
                 </h1>
 
@@ -121,7 +133,7 @@ function Home() {
                 <div className=" flex h-full justify-evenly">
                     {/* left arrow */}
                     <div className="flex items-center justify-center ">
-                    <i className="bi bi-arrow-left "></i>
+                        <i className="bi bi-arrow-left "></i>
                     </div>
 
                     {/* CARDs */}
@@ -131,13 +143,27 @@ function Home() {
                     </div>
                     {/* right arrow */}
                     <div className=" flex items-center justify-center">
-                    <i className="bi bi-arrow-right "></i>
+                        <i className="bi bi-arrow-right "></i>
                     </div>
 
                 </div>
-                
+
             </div>
-            
+
+
+
+            {/* Feedback carousel */}
+
+            <h1 className="  ml-36 mb-10 font-bold text-2xl">
+                Feedback
+                <i className="bi bi-arrow-right ml-2 text-blue-600 "></i>
+            </h1>
+
+            <div className=" flex items-center justify-center w-full mb-10" >
+                <FeedbackCarosel> </FeedbackCarosel>
+            </div>
+
+
 
         </section>
 
