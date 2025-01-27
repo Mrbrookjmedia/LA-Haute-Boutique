@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { AuthContext } from "../context/AuthContext"; // Import AuthContext for user data
 import imgShop1 from "../assets/images/imgShop1.png";
 import imgShop2 from "../assets/images/imgShop2.png";
 import imgShop3 from "../assets/images/imgShop3.png";
@@ -86,13 +87,15 @@ const initialProducts = [
 ];
 
 export default function ProductPage() {
-  const { productId } = useParams(); // Get the product ID from the URL
-  const navigate = useNavigate(); // For navigating to other product pages
-  const { cart, addToCart } = useCart(); // Destructure `cart` and `addToCart` from useCart()
+  const { productId } = useParams();
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext); // Get the user object from AuthContext
+  const { cart, addToCart } = useCart(); // Fallback if useCart isn't defined should be handled
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  const [selectedImage, setSelectedImage] = useState(null); // State for the selected image
-
-  const product = initialProducts.find((item) => item.id === parseInt(productId));
+  const product = initialProducts.find(
+    (item) => item.id === parseInt(productId)
+  );
 
   if (!product) {
     return (
@@ -108,19 +111,21 @@ export default function ProductPage() {
     );
   }
 
-  const similarProducts = initialProducts.filter(
-    (item) => item.category === product.category && item.id !== product.id
-  );
+  const handleAddToCart = () => {
+    if (!user) {
+      // Redirect to login page if the user is not authenticated
+      navigate("/login");
+      return;
+    }
 
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
+    // Add product to cart
+    addToCart(product);
   };
 
   return (
     <div className="bg-gray-50 min-h-screen p-8">
       {/* Main Product Section */}
       <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Product Images */}
         <div>
           <img
             src={selectedImage || product.image}
@@ -134,17 +139,18 @@ export default function ProductPage() {
                 src={img}
                 alt={`Product image ${index + 1}`}
                 className="w-20 h-20 object-cover rounded-lg border hover:scale-105 transition-transform cursor-pointer"
-                onClick={() => handleImageClick(img)}
+                onClick={() => setSelectedImage(img)}
               />
             ))}
           </div>
         </div>
-  
-        {/* Product Details */}
+
         <div className="flex flex-col justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
-            <p className="text-lg text-gray-600 mt-2">${product.price.toFixed(2)}</p>
+            <p className="text-lg text-gray-600 mt-2">
+              ${product.price.toFixed(2)}
+            </p>
             <p className="mt-4 text-gray-600">{product.description}</p>
             <div className="mt-6">
               <p className="text-sm text-gray-500">
@@ -159,7 +165,7 @@ export default function ProductPage() {
           </div>
           <div className="mt-8">
             <button
-              onClick={() => addToCart(product)}
+              onClick={handleAddToCart}
               className="bg-blue-500 text-white px-6 py-3 rounded-lg w-full hover:bg-blue-600 transition"
             >
               Add to Cart
@@ -167,57 +173,44 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
-  
-      {/* Cart Summary Section */}
-      {/* <div className="mt-12">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Cart</h2>
-        <ul className="space-y-4">
-          {cart.map((item, index) => (
-            <li
-              key={index}
-              className="p-4 bg-white shadow rounded-lg flex justify-between"
-            >
-              <div>
-                <h3 className="font-semibold">{item.name}</h3>
-                <p>${item.price.toFixed(2)}</p>
-              </div>
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-16 h-16 object-cover rounded-lg"
-              />
-            </li>
-          ))}
-        </ul>
-      </div> */}
-  
+
       {/* Similar Products Section */}
       <div className="mt-12">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Similar Products</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          Similar Products
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-8/12">
-          {similarProducts.map((similarProduct) => (
-            <div
-              key={similarProduct.id}
-              className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition"
-            >
-              <img
-                src={similarProduct.image}
-                alt={similarProduct.name}
-                className="w-60 h-60 object-cover rounded-lg"
-              />
-              <h3 className="text-lg font-semibold mt-2">{similarProduct.name}</h3>
-              <p className="text-gray-600">${similarProduct.price.toFixed(2)}</p>
-              <button
-                onClick={() => navigate(`/product/${similarProduct.id}`)}
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+          {initialProducts
+            .filter(
+              (item) =>
+                item.category === product.category && item.id !== product.id
+            )
+            .map((similarProduct) => (
+              <div
+                key={similarProduct.id}
+                className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition"
               >
-                View Details
-              </button>
-            </div>
-          ))}
+                <img
+                  src={similarProduct.image}
+                  alt={similarProduct.name}
+                  className="w-60 h-60 object-cover rounded-lg"
+                />
+                <h3 className="text-lg font-semibold mt-2">
+                  {similarProduct.name}
+                </h3>
+                <p className="text-gray-600">
+                  ${similarProduct.price.toFixed(2)}
+                </p>
+                <button
+                  onClick={() => navigate(`/product/${similarProduct.id}`)}
+                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+                >
+                  View Details
+                </button>
+              </div>
+            ))}
         </div>
       </div>
     </div>
   );
-  
 }

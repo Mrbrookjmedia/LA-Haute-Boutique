@@ -11,6 +11,10 @@ import authRoutes from "./routes/auth.routes.js";
 // import eventRegistrationRoutes from "./routes/eventRegistration.js"; // Include the event registration route
 import path from "path";
 
+
+import cartRoutes from "./routes/cartRoutes.js";
+
+
 import connectToDatabase from "./db/connectTodatabase.js";
 import userRoutes from "./routes/user.routes.js";
 
@@ -39,6 +43,10 @@ app.use(
 
 app.use(express.json()); //to parse incoming info with json payloads
 app.use(cookieParser());
+
+
+app.use("/api/cart", cartRoutes);
+
 
 const PORT = process.env.PORT || 4001; // Use process.env.PORT if available, otherwise default to 5001
 
