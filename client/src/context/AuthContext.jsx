@@ -1,41 +1,11 @@
-// import React, { createContext, useEffect, useState } from "react";
-// import Cookies from "js-cookie";
 
-// export const AuthContext = createContext();
-
-// export const AuthContextProvider = ({ children }) => {
-//   const [currentUser, setCurrentUser] = useState(
-//     Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null
-//   );
-
-//   const updateUser = (data) => {
-//     setCurrentUser(data);
-//   };
-
-//   useEffect(() => {
-//     if (currentUser) {
-//       Cookies.set("user", JSON.stringify(currentUser), { expires: 7 }); // Store for 7 days
-//     } else {
-//       Cookies.remove("user");
-//     }
-//   }, [currentUser]);
-
-//   return (
-//     <AuthContext.Provider value={{ currentUser, updateUser }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
-
-
-
-
-import React, { createContext, useState, useEffect } from "react";
-
+import React, { createContext, useState, useEffect, useContext} from "react";
+import apiRequest from "../lib/apiRequest";
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [wishlistItems, setWishlistItems] = useState([]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user")); // Retrieve user data from local storage
@@ -53,13 +23,28 @@ export const AuthContextProvider = ({ children }) => {
     localStorage.removeItem("user");
     setCurrentUser(null);
   };
+
+
+  const refreshUserData = async () => {
+    try {
+      const wishlistResponse = await apiRequest.get("/user/wishlist");
+      setWishlistItems(wishlistResponse.data);
+    } catch (error) {
+      console.error("Failed to refresh user data:", error);
+    }
+  };
+
+
+
   const updateUser = (user) => {
     setCurrentUser(user);
   };
 
 
+   
+
   return (
-    <AuthContext.Provider value={{ currentUser, login, logout,updateUser }}>
+    <AuthContext.Provider value={{ currentUser,setCurrentUser, login, logout,updateUser,wishlistItems,refreshUserData  }}>
       {children}
     </AuthContext.Provider>
   );

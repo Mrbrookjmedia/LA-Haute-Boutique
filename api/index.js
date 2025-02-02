@@ -10,11 +10,11 @@ import authRoutes from "./routes/auth.routes.js";
 // import threadRoutes from "./routes/thread.routes.js";
 // import eventRegistrationRoutes from "./routes/eventRegistration.js"; // Include the event registration route
 import path from "path";
-
+import productRoutes from "./routes/productRoutes.js";
 
 import cartRoutes from "./routes/cartRoutes.js";
 
-
+import wishlistRoutes from "./routes/wishlist.routes.js";
 import connectToDatabase from "./db/connectTodatabase.js";
 import userRoutes from "./routes/user.routes.js";
 
@@ -43,12 +43,12 @@ app.use(
 
 app.use(express.json()); //to parse incoming info with json payloads
 app.use(cookieParser());
-
-
+app.use("/api/users", userRoutes);
+app.use("/api/user/wishlist", wishlistRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/products", productRoutes);
 
-
-const PORT = process.env.PORT || 4001; // Use process.env.PORT if available, otherwise default to 5001
+const PORT = process.env.PORT || 4000; // Use process.env.PORT if available, otherwise default to 5001
 
 app.use("/api/auth", authRoutes);
 // app.use("/api", dataRepoRoutes);

@@ -73,13 +73,15 @@
 
 // routes/cartRoutes.js
 import express from "express";
-import { getCart, addToCart, clearCart } from "../controllers/cart.controller.js";
+import { getCart, addToCart, removeFromCart, updateCartItem } from "../controllers/cart.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
 const router = express.Router();
 
-router.get("/", verifyToken, getCart); // Fetch cart
-router.post("/add", verifyToken, addToCart); // Add item to cart
-router.delete("/clear", verifyToken, clearCart); // Clear cart
+// All cart endpoints require authentication
+router.get("/", verifyToken, getCart);
+router.post("/add", verifyToken, addToCart);
+router.put("/update", verifyToken, updateCartItem);
+router.delete("/remove/:productId", verifyToken, removeFromCart);
 
 export default router;

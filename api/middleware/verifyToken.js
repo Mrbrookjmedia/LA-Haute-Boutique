@@ -1,13 +1,36 @@
+  // import jwt from "jsonwebtoken";
+  // // middleware/verifyToken.js
+  // export const verifyToken = (req, res, next) => {
+  //   const token = req.cookies.jwt || req.header('x-auth-token');
+  //   if (!token) {
+  //     return res.status(401).json({ message: "Access denied. No token provided" });
+  //   }
+  
+  //   try {
+  //     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  //     req.userId = decoded.userId; // Attach user ID to request object
+  //     console.log("Decoded User ID:", req.userId);
+  //     next();
+  //   } catch (error) {
+  //     res.status(401).json({ message: "Invalid token" });
+  //   }
+  // };
+  
+
   import jwt from "jsonwebtoken";
+
   export const verifyToken = (req, res, next) => {
-    const user = req.cookies.user;
-
-    if (!user) return res.status(401).send({ message: "Not Authenticated" });
-
-    jwt.verify(user, process.env.JWT_SECRET, async (err, payload) => {
-      if (err)
-        return res.status(403).send({ message: "Token is not Valid", err });
-      req.userId = payload._id;
+    const token = req.cookies.jwt || req.header("Authorization")?.replace("Bearer ", "");
+    if (!token) {
+      return res.status(401).json({ message: "Access denied. No token provided" });
+    }
+  
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.userId = decoded.userId; // Attach user ID to request object
       next();
-    });
+    } catch (error) {
+      res.status(401).json({ message: "Invalid token" });
+    }
   };
+  

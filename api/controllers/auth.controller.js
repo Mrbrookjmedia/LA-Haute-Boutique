@@ -64,38 +64,43 @@ export const logout = (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 export const update = async (req, res) => {
-  const { id, fullname, username, email, currentPassword, newPassword } =
-    req.body;
-  // const tokenUserId = req.userId;
   try {
-    const user = await User.findById(id);
+    const { fullname, username, email, phone, address, currentPassword, newPassword } = req.body;
+    const userId = req.userId; // Extracted from token
+
+    const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).send({ message: "User not found." });
+      return res.status(404).json({ message: "User not found" });
     }
+
+    // Update password if provided
     if (currentPassword && newPassword) {
-      const isPasswordCorrect = await bcrypt.compare(
-        currentPassword,
-        user.password
-      );
+      const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
       if (!isPasswordCorrect) {
-        return res.status(400).send({ message: "Incorrect current password." });
+        return res.status(400).json({ message: "Incorrect current password" });
       }
-
-      //Hash password here
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(newPassword, salt);
-      user.password = hashedPassword;
+      user.password = await bcrypt.hash(newPassword, salt);
     }
 
-    if (fullname) user.fullname = fullname;
-    if (username) user.username = username;
-    if (email) user.email = email;
+    // Update other fields
+    user.fullname = fullname || user.fullname;
+    user.username = username || user.username;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+    user.address = address || user.address;
 
-    await user.save();
-    res.send({ message: "Profile updated." });
+    const updatedUser = await user.save();
+
+    // Remove sensitive data before sending response
+    const { password, ...userData } = updatedUser._doc;
+
+    res.status(200).json({ message: "Profile updated successfully", user: userData });
   } catch (error) {
-    console.log("Error in updating profile controller: ", error);
-    res.status(500).send({ message: "Error in updating profile" });
+    console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Error updating profile" });
   }
 };
+

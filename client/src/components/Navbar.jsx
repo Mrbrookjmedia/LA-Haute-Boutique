@@ -20,8 +20,8 @@ function Navbar(){
                     <NavLink to="/support" className=" hover:text-blue-700 hover:font-bold" >Support</NavLink>
                 </div>
                 <div className="flex gap-8">
-                    <BsPerson size={32} color="" className="border-2 rounded-md" ></BsPerson>
-                    <BsCart size={32} color="" className="border-2 rounded-md " ></BsCart>
+                <NavLink to="/user-dash" className=" hover:text-blue-700 hover:font-bold" ><BsPerson size={32} color="" className="border-2 rounded-md" ></BsPerson></NavLink>
+                    <NavLink to="/cart" className=" hover:text-blue-700 hover:font-bold" > <BsCart size={32} color="" className="border-2 rounded-md " ></BsCart>  </NavLink>
                 </div>
             </div>
         </section>
