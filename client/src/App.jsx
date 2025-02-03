@@ -9,9 +9,10 @@ import { lazy, Suspense } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { AuthContextProvider } from "./context/AuthContext";
+// import {CartContextProvider} from "./context/CartContext";
 import { ToastContainer } from "react-toastify";
 
-// import { CartProvider } from "./context/CartContext";
+import { CartProvider } from "./context/CartContext";
 const Home = lazy(() => import("./components/Home"));
 const About = lazy(() => import("./pages/About"));
 const Shop = lazy(() => import("./pages/Shop"));
@@ -34,8 +35,8 @@ import ProtectAdminRoute from "./components/ProtectAdminRoute";
 function App() {
   return (
     <AuthContextProvider>
-       
-        <Router>
+    <CartProvider>
+        <Router> 
           <Navbar />
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
@@ -54,8 +55,8 @@ function App() {
 
 
               {/* <Route element={<ProtectAdminRoute />}> */}
-              <Route path="/admin" element={<AdminDashboard />} />
-              {/* </Route> */}
+    <Route path="/admin" element={<AdminDashboard />} />
+  {/* </Route> */}
               <Route element={<ProtectRoute />}>
               <Route path="/user-dash" element={<UserPage />} />
               <Route path="/setting" element={<UserSettings />} />
@@ -66,7 +67,7 @@ function App() {
           <Footer />
           <ToastContainer />
         </Router>
-    
+    </CartProvider>
     </AuthContextProvider>
   );
 }
