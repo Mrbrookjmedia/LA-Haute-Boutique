@@ -91,11 +91,12 @@ const CreateNewProduct = () => {
         { withCredentials: true }
       ).then((res) => { 
         toast.success("Product created successfully!");
-        navigate("/products");
+        navigate("/admin");
       }).catch((err) => {
         console.error("Creation error", err);
         toast.error(err.response?.data?.message || err.message || "Product creation failed");
       });
+
       
     } catch (error) {
       toast.error(error.response?.data?.message || error.message || "Product creation failed due to server error ");
@@ -113,13 +114,17 @@ const CreateNewProduct = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Product Basics */}
           <div>
-            <h2 className="text-lg font-medium mb-4 flex items-center">
+            {/* <h2 className="text-lg font-medium mb-4 flex items-center">
               <ShoppingBag className="mr-2 text-blue-600" /> Product Basics
-            </h2>
+            </h2> */}
             <div className="space-y-4">
               <div>
-                <label className="block mb-2">Product Name *</label>
+                <div className="flex  gap-2">
+                  <ShoppingBag className="mr-2 text-blue-600" />
+                  <label className=" block mb-2">Product Name *</label>
+                </div>
                 <input
+
                   type="text"
                   name="name"
                   value={productData.name}

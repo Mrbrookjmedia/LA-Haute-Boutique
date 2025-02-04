@@ -14,10 +14,11 @@ import {
 export function AdminSidebar() {
   return (
     <>
-      <div className="flex  h-screen">
-        <div>
+      <div className="flex h-screen">
+        <div >
           <Sidebar aria-label="Default sidebar example">
             <Sidebar.Items>
+
               <Sidebar.ItemGroup>
                 <Sidebar.Item href="/admin/dashboard" icon={HiChartPie}>
                   Dashboard
@@ -31,7 +32,7 @@ export function AdminSidebar() {
                     Create Product
                   </Sidebar.Item>
                   <Sidebar.Item href="/admin/allproducts">
-                    Product List
+                    Manage Products
                   </Sidebar.Item>
                 </Sidebar.Collapse>
                 <Sidebar.Item href="/admin/orders" icon={HiTable}>

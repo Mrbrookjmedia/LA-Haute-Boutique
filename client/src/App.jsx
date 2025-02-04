@@ -5,9 +5,10 @@ import { lazy, Suspense } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { AuthContextProvider } from "./context/AuthContext";
+// import {CartContextProvider} from "./context/CartContext";
 import { ToastContainer } from "react-toastify";
 
-// import { CartProvider } from "./context/CartContext";
+import { CartProvider } from "./context/CartContext";
 const Home = lazy(() => import("./components/Home"));
 const About = lazy(() => import("./pages/About"));
 const Shop = lazy(() => import("./pages/Shop"));
@@ -25,6 +26,7 @@ const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const AdminUser = lazy(() => import("./pages/AdminUser"));
 const AdminOrder = lazy(() => import("./pages/AdminOrder"));
 const CreateNewProduct = lazy(() => import("./pages/CreateNewProduct"));
+const AdminEditProdut = lazy(() => import("./pages/AdminEditProdut"));
 const AdminHomepage = lazy(() => import("./pages/AdminHomepage"));
 const AdminAllProducts = lazy(() => import("./pages/AdminAllProducts"));
 //protect routes component
@@ -35,22 +37,24 @@ import ProtectAdminRoute from "./components/ProtectAdminRoute";
 function App() {
   return (
     <AuthContextProvider>
-      <Router>
-        <Navbar />
-        <Suspense fallback={<div>Loading...</div>}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/product/:id" element={<ProductPage />} />
-            <Route path="/support" element={<Support />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/collections" element={<Collection />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/aitools" element={<AiTools />} />
-            <Route element={<ProtectRoute />}></Route>
+    <CartProvider>
+        <Router> 
+          <Navbar />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/product/:id" element={<ProductPage />} />
+              <Route path="/support" element={<Support />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/collections" element={<Collection />} />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/aitools" element={<AiTools />} />
+              <Route element={<ProtectRoute />}></Route>
+
 
             {/* <Route element={<ProtectAdminRoute />}> */}
             <Route path="/admin" element={<AdminHomepage />}>
@@ -60,18 +64,23 @@ function App() {
               <Route path="users" element={<AdminUser />} />
               <Route path="createproducts" element={<CreateNewProduct />} />
               <Route path="allproducts" element={<AdminAllProducts />} />
+              <Route path="/admin/products/edit/:id" element={<AdminEditProdut />} />
+
               <Route path="orders" element={<AdminOrder />} />
             </Route>
             {/* </Route> */}
             <Route element={<ProtectRoute />}>
+
               <Route path="/user-dash" element={<UserPage />} />
               <Route path="/setting" element={<UserSettings />} />
             </Route>
-          </Routes>
-        </Suspense>
-        <Footer />
-        <ToastContainer />
-      </Router>
+
+            </Routes>
+          </Suspense>
+          <Footer />
+          <ToastContainer />
+        </Router>
+    </CartProvider>
     </AuthContextProvider>
   );
 }

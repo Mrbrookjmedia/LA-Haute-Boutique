@@ -29,13 +29,25 @@ const productSchema = new mongoose.Schema(
       enum: ["bags", "shoes", "apparel", "accessories"],
       required: true,
     },
+    subcategory: {
+      type: String,
+    },
+
+    Colors: {
+      type: [String],
+    },
+    Sizes: {
+      type: [String],
+    },
     description: { type: String, required: true },
     price: { type: Number, required: true },
+
+
     images: {
       type: [String],
       validate: {
-        validator: (v) => v.length <= 3,
-        message: "Maximum three images allowed",
+        validator: (v) => v.length <= 5,
+        message: "Maximum five images allowed",
       },
     },
   },
