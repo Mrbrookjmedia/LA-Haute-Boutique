@@ -218,7 +218,7 @@ const UserSettings = () => {
               Save Changes
             </button>
             <Link
-              to="/account"
+              to="/user-dash"
               className="bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600 transition"
             >
               Cancel

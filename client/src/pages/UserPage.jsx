@@ -17,7 +17,7 @@ const UserPage = () => {
     const fetchUserData = async () => {
       try {
         // Orders endpoint returns an empty array for now
-        const ordersResponse = await apiRequest.get("/user/orders");
+        const ordersResponse = await apiRequest.get("/orders/user");
         await refreshUserData(); // refresh wishlist from backend
 
         setOrders(ordersResponse.data);
@@ -33,7 +33,7 @@ const UserPage = () => {
     if (currentUser) {
       fetchUserData();
     }
-  }, [currentUser, refreshUserData]);
+  }, [currentUser]);
 
   // Logout handler
   const handleLogout = async () => {
@@ -49,6 +49,26 @@ const UserPage = () => {
       toast.error(err.response?.data?.message || "Logout failed");
     }
   };
+
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await apiRequest.get("/orders/user");
+        setOrders(response.data);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      }
+    };
+  
+    if (currentUser) {
+      fetchOrders();
+    }
+  }, [currentUser]);
+  
+
+
+  
 
   // Remove an item from wishlist. (This calls /api/user/wishlist/:productId)
   const handleRemoveFromWishlist = async (productId) => {
@@ -165,32 +185,38 @@ const UserPage = () => {
       )}
 
       {/* Recent Orders */}
-      <div className="mb-8 bg-white rounded-lg p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-medium">Recent Orders</h2>
-          <span className="text-sm text-gray-500">
-            {orders.length} orders
+       {/* In the render section, update the orders display: */}
+<div className="space-y-4">
+  {orders.length === 0 ? (
+    <p className="text-center text-gray-500">No orders found</p>
+  ) : (
+    orders.map((order) => (
+      <div key={order._id} className="border rounded-lg p-4">
+        <div className="flex justify-between mb-2">
+          <p className="font-semibold">Order ID: {order._id}</p>
+          <span className={`px-2 py-1 rounded ${
+            order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+            order.status === 'Processing' ? 'bg-blue-100 text-blue-800' :
+            'bg-yellow-100 text-yellow-800'
+          }`}>
+            {order.status}
           </span>
         </div>
-        <div className="space-y-4">
-          {orders.length === 0 ? (
-            <p className="text-center text-gray-500">No orders found</p>
-          ) : (
-            orders.map((order) => (
-              <div key={order.orderId} className="border rounded-lg p-4">
-                <p>Order ID: {order.orderId}</p>
-                <p>
-                  Date:{" "}
-                  {new Date(order.createdAt).toLocaleDateString()}
-                </p>
-                <p>
-                  Total: ${order.total?.toFixed(2)}
-                </p>
-              </div>
-            ))
-          )}
+        <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
+        <p>Total: ${order.totalAmount.toFixed(2)}</p>
+        <div className="mt-2">
+          <p className="font-medium">Items:</p>
+          {order.orderItems.map((item, index) => (
+            <div key={index} className="flex justify-between py-1">
+              <span>{item.product.name} x {item.quantity}</span>
+              <span>${(item.price * item.quantity).toFixed(2)}</span>
+            </div>
+          ))}
         </div>
       </div>
+    ))
+  )}
+</div>
 
       {/* Wishlist Section */}
       <div className="bg-white rounded-lg p-6 shadow-sm">

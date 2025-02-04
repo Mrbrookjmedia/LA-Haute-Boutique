@@ -1,17 +1,14 @@
-import './styles/App.css';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import "./styles/App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { AuthContextProvider } from "./context/AuthContext";
+// import {CartContextProvider} from "./context/CartContext";
 import { ToastContainer } from "react-toastify";
 
-// import { CartProvider } from "./context/CartContext";
+import { CartProvider } from "./context/CartContext";
 const Home = lazy(() => import("./components/Home"));
 const About = lazy(() => import("./pages/About"));
 const Shop = lazy(() => import("./pages/Shop"));
@@ -25,17 +22,23 @@ const Blogs = lazy(() => import("./pages/Blogs"));
 const AiTools = lazy(() => import("./pages/AiTools"));
 const UserPage = lazy(() => import("./pages/UserPage"));
 const UserSettings = lazy(() => import("./pages/UserSettings"));
-const AdminDashboard= lazy(() => import("./pages/AdminDashboard"));
-
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const AdminUser = lazy(() => import("./pages/AdminUser"));
+const AdminOrder = lazy(() => import("./pages/AdminOrder"));
+const CreateNewProduct = lazy(() => import("./pages/CreateNewProduct"));
+const AdminEditProdut = lazy(() => import("./pages/AdminEditProdut"));
+const AdminHomepage = lazy(() => import("./pages/AdminHomepage"));
+const AdminAllProducts = lazy(() => import("./pages/AdminAllProducts"));
 //protect routes component
 import ProtectRoute from "./components/ProtectRoute";
 import ProtectAdminRoute from "./components/ProtectAdminRoute";
+// import CreateNewProduct from "./pages/CreateNewProduct";
 
 function App() {
   return (
     <AuthContextProvider>
-       
-        <Router>
+    <CartProvider>
+        <Router> 
           <Navbar />
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
@@ -53,10 +56,21 @@ function App() {
               <Route element={<ProtectRoute />}></Route>
 
 
-              {/* <Route element={<ProtectAdminRoute />}> */}
-              <Route path="/admin" element={<AdminDashboard />} />
-              {/* </Route> */}
-              <Route element={<ProtectRoute />}>
+            {/* <Route element={<ProtectAdminRoute />}> */}
+            <Route path="/admin" element={<AdminHomepage />}>
+              <Route index element={<AdminDashboard />} />{" "}
+              {/* Default admin page */}
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="users" element={<AdminUser />} />
+              <Route path="createproducts" element={<CreateNewProduct />} />
+              <Route path="allproducts" element={<AdminAllProducts />} />
+              <Route path="/admin/products/edit/:id" element={<AdminEditProdut />} />
+
+              <Route path="orders" element={<AdminOrder />} />
+            </Route>
+            {/* </Route> */}
+            <Route element={<ProtectRoute />}>
+
               <Route path="/user-dash" element={<UserPage />} />
               <Route path="/setting" element={<UserSettings />} />
             </Route>
@@ -66,7 +80,7 @@ function App() {
           <Footer />
           <ToastContainer />
         </Router>
-    
+    </CartProvider>
     </AuthContextProvider>
   );
 }

@@ -6,13 +6,20 @@ import { Heart } from 'lucide-react';
 import { toast } from 'react-toastify';
 import apiRequest from "../lib/apiRequest";
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 const ProductPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [inWishlist, setInWishlist] = useState(false);
   const { currentUser, refreshUserData} = useContext(AuthContext);
-  
+
+  const { addToCart } = useCart();
+  const handleAddToCart = () => {
+    addToCart(id, 1); // Use the context's addToCart function
+    toast.success("Added to cart!");
+  };
+
   useEffect(() => {
     // Fetch product details
     apiRequest.get(`/products/${id}`)
@@ -29,16 +36,16 @@ const ProductPage = () => {
     }
   }, [id, currentUser]);
   
-  const addToCart = () => {
-    apiRequest.post("/cart/add", { productId: id, quantity: 1 })
-      .then((res) => {
-        toast.success("Added to cart!");
-      })
-      .catch((err) => {
-        console.error("Error adding to cart", err);
-        toast.error("Failed to add to cart");
-      });
-  };
+  // const addToCart = () => {
+  //   apiRequest.post("/cart/add", { productId: id, quantity: 1 })
+  //     .then((res) => {
+  //       toast.success("Added to cart!");
+  //     })
+  //     .catch((err) => {
+  //       console.error("Error adding to cart", err);
+  //       toast.error("Failed to add to cart");
+  //     });
+  // };
   
   const toggleWishlist = async () => {
     if (!currentUser) {
@@ -79,7 +86,7 @@ const ProductPage = () => {
       <p className="text-2xl font-bold mb-4">Price: ${product.price.toFixed(2)}</p>
       <div className="flex space-x-4">
         <button 
-          onClick={addToCart}
+          onClick={handleAddToCart}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
         >
           Add To Cart

@@ -10,13 +10,17 @@ export const createProduct = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
-    const { name, category, description, price, images } = req.body;
+    const { name, category, subcategory, description, price, images, Colors, Sizes } = req.body;
     const product = new Product({
       name,
       category,
+      subcategory,
+      Colors,
+      Sizes,
       description,
       price,
       images,
+
     });
 
     await product.save();
@@ -51,4 +55,53 @@ export const getProductById = async (req, res) => {
   }
 };
 
+export const deleteProduct = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user || !user.isAdmin) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+    const product = await Product.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Product deleted" });
+  } catch (error) {
+    console.error("Error deleting product:", error);  
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the existing product
+    let product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Update only provided fields
+    const updatedData = req.body;
+    Object.keys(updatedData).forEach((key) => {
+      if (updatedData[key] !== undefined) {
+        product[key] = updatedData[key];
+      }
+    });
+
+    // Save the updated product
+    const updatedProduct = await product.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    console.error("Update error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error, unable to update product",
+    });
+  }
+};
 
