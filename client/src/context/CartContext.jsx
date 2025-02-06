@@ -1,190 +1,207 @@
-// import React, { createContext, useContext, useState } from "react";
-
-// const CartContext = createContext();
-
-// export function CartProvider({ children }) {
-//   const [cart, setCart] = useState([]);
-
-//   const addToCart = (product) => {
-//     setCart((prevCart) => [...prevCart, product]);
-//   };
-
-//   const clearCart = () => {
-//     setCart([]);
-//   };
-
-//   return (
-//     <CartContext.Provider value={{ cart, addToCart, clearCart }}>
-//       {children}
-//     </CartContext.Provider>
-//   );
-// }
-
-// export function useCart() {
-//   return useContext(CartContext);
-// }
-
-
-
-
-
-
-
+// // context/CartContext.jsx
 // import React, { createContext, useContext, useState, useEffect } from "react";
 // import { AuthContext } from "./AuthContext";
-// import { apiRequest } from "../lib/apiRequest"; // Assumes you have this for making API calls
+// import apiRequest from "../lib/apiRequest";
 
 // const CartContext = createContext();
 
-// export function CartProvider({ children }) {
-//   const { currentUser } = useContext(AuthContext); // Access current user from AuthContext
+// export const CartProvider = ({ children }) => {
+//   const { currentUser } = useContext(AuthContext);
 //   const [cart, setCart] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState(null);
 
-//   // Fetch the cart from the backend when the user logs in
 //   useEffect(() => {
-//     const fetchCart = async () => {
-//       if (currentUser) {
-//         try {
-//           const response = await apiRequest("/api/cart", "GET", null, currentUser.token);
-//           if (response.ok) {
-//             const data = await response.json();
-//             setCart(data.items || []);
-//           }
-//         } catch (error) {
-//           console.error("Failed to fetch cart:", error);
-//         }
-//       } else {
-//         setCart([]); // Clear cart for logged-out users
-//       }
-//     };
-
-//     fetchCart();
+//     if (currentUser) {
+//       fetchCart();
+//     } else {
+//       setCart([]);
+//     }
 //   }, [currentUser]);
 
-//   const addToCart = async (product) => {
-//     if (currentUser) {
-//       try {
-//         const response = await apiRequest(
-//           "/api/cart/add",
-//           "POST",
-//           { productId: product.id, quantity: 1 },
-//           currentUser.token
-//         );
-//         if (response.ok) {
-//           const data = await response.json();
-//           setCart(data.cart.items);
+//   const fetchCart = async () => {
+//     try {
+//       setLoading(true);
+//       const response = await apiRequest.get("/cart", {
+//         headers: {
+//           Authorization: `Bearer ${currentUser.token}`
 //         }
-//       } catch (error) {
-//         console.error("Failed to add to cart:", error);
-//       }
-//     } else {
-//       // Handle cart in local state for guests
-//       setCart((prevCart) => [...prevCart, product]);
+//       });
+//       setCart(response.data.items || []);
+//     } catch (error) {
+//       console.error("Error fetching cart:", error);
+//       setError(error.response?.data?.message || "Failed to fetch cart");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const addToCart = async (productId, quantity = 1) => {
+//     if (!currentUser) {
+//       console.warn("User is not logged in");
+//       return false;
+//     }
+
+//     try {
+//       setLoading(true);
+//       const response = await apiRequest.post(
+//         "/cart/add",
+//         { productId, quantity },
+//         {
+//           headers: {
+//             Authorization: `Bearer ${currentUser.token}`
+//           }
+//         }
+//       );
+//       setCart(response.data.items);
+//       return true;
+//     } catch (error) {
+//       console.error("Error adding to cart:", error.response?.data || error.message);
+//       setError(error.response?.data?.message || "Failed to add item");
+//       return false;
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const updateQuantity = async (productId, quantity) => {
+//     try {
+//       setLoading(true);
+//       const response = await apiRequest.put(`/cart/update/${productId}`, {
+//         quantity
+//       });
+//       setCart(response.data.items);
+//     } catch (error) {
+//       setError(error.response?.data?.message || "Failed to update quantity");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const removeItem = async (productId) => {
+//     try {
+//       setLoading(true);
+//       await apiRequest.delete(`/cart/item/${productId}`);
+//       setCart(prev => prev.filter(item => item.productId !== productId));
+//     } catch (error) {
+//       setError(error.response?.data?.message || "Failed to remove item");
+//     } finally {
+//       setLoading(false);
 //     }
 //   };
 
 //   const clearCart = async () => {
-//     if (currentUser) {
-//       try {
-//         const response = await apiRequest("/api/cart/clear", "DELETE", null, currentUser.token);
-//         if (response.ok) {
-//           setCart([]);
-//         }
-//       } catch (error) {
-//         console.error("Failed to clear cart:", error);
-//       }
-//     } else {
-//       setCart([]); // Clear local cart for guests
+//     try {
+//       setLoading(true);
+//       await apiRequest.delete("/cart/clear");
+//       setCart([]);
+//     } catch (error) {
+//       setError(error.response?.data?.message || "Failed to clear cart");
+//     } finally {
+//       setLoading(false);
 //     }
 //   };
 
 //   return (
-//     <CartContext.Provider value={{ cart, addToCart, clearCart }}>
+//     <CartContext.Provider value={{
+//       cart,
+//       loading,
+//       error,
+//       addToCart,
+//       updateQuantity,
+//       removeItem,
+//       clearCart
+//     }}>
 //       {children}
 //     </CartContext.Provider>
 //   );
-// }
+// };
 
-// export function useCart() {
-//   return useContext(CartContext);
-// }
+// export const useCart = () => useContext(CartContext);
 
 
-
-
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { AuthContext } from "./AuthContext";
-import apiRequest from "../lib/apiRequest"; // Helper for API calls
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import apiRequest from '../lib/apiRequest';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const { currentUser } = useContext(AuthContext);
   const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchCart = async () => {
+    try {
+      const response = await apiRequest.get('/cart');
+      setCart(response.data.items || []);
+      setError(null);
+    } catch (err) {
+      setError("Failed to load cart");
+      console.error("Error fetching cart:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCart = async () => {
-      if (currentUser?.token) {
-        try {
-          const response = await apiRequest.get("/cart", {
-            headers: {
-              Authorization: `Bearer ${currentUser.token}`,
-            },
-          });
-          setCart(response.data.items || []);
-        } catch (error) {
-          console.error("Error fetching cart:", error.response?.data || error.message);
-        }
-      } else {
-        setCart([]); // Clear cart for guests
-      }
-    };
-
     fetchCart();
-  }, [currentUser]);
+  }, []);
 
-  const addToCart = async (productId, quantity = 1) => {
-    if (currentUser) {
-      try {
-        const response = await apiRequest.post(
-          "/cart/add",
-          { productId, quantity },
-          {
-            headers: {
-              Authorization: `Bearer ${currentUser.token}`,
-            },
-          }
-        );
-        setCart(response.data.items);
-      } catch (error) {
-        console.error("Error adding to cart:", error.response?.data || error.message);
-      }
-    } else {
-      console.warn("User is not logged in. Redirect to login.");
+  const updateQuantity = async (productId, quantity) => {
+    try {
+      await apiRequest.put('/cart/update', { productId, quantity });
+      await fetchCart();
+    } catch (err) {
+      console.error("Error updating quantity:", err);
+    }
+  };
+
+  const removeItem = async (productId) => {
+    try {
+      await apiRequest.delete(`/cart/remove/${productId}`);
+      await fetchCart();
+    } catch (err) {
+      console.error("Error removing item:", err);
     }
   };
 
   const clearCart = async () => {
-    if (currentUser) {
-      try {
-        const response = await apiRequest.delete("/cart/clear", {
-          headers: {
-            Authorization: `Bearer ${currentUser.token}`,
-          },
-        });
-        setCart([]); // Clear cart after successful response
-      } catch (error) {
-        console.error("Error clearing cart:", error.response?.data || error.message);
-      }
+    try {
+      await apiRequest.post('/cart/clear');
+      setCart([]);
+    } catch (err) {
+      console.error("Error clearing cart:", err);
+    }
+  };
+  const addToCart = async (productId, quantity) => {
+    try {
+      await apiRequest.post('/cart/add', { productId, quantity });
+      await fetchCart(); // Immediately fetch updated cart
+    } catch (err) {
+      console.error("Error adding to cart:", err);
     }
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, clearCart }}>
+    <CartContext.Provider value={{
+      cart,
+      loading,
+      error,
+      updateQuantity,
+      removeItem,
+      clearCart,
+      fetchCart,
+      addToCart
+    }}>
       {children}
     </CartContext.Provider>
   );
 };
 
-export const useCart = () => useContext(CartContext);
-
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+};

@@ -4,6 +4,11 @@ import Banner from "./Banner";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 
+import imgShop2 from "../assets/images/imgShop2.png";
+import imgShop3 from "../assets/images/imgShop3.png";
+import imgShop7 from "../assets/images/imgShop7.png";
+import imgShop13 from "../assets/images/imgShop13.png";
+
 
 
 import featureImage1 from "../assets/images/featured1.png"
@@ -76,8 +81,8 @@ function Home() {
 
             <div className=" m-16 h-auto  ">
                 <h1 className=" m-5 ml-24 font-bold text-2xl">
-                    New Arrival
-                    <i className="bi bi-arrow-right ml-2 text-blue-600 "></i>
+                SHOP OUR LATEST COLLECTIONS
+                <Link to="shop">    <i className="bi bi-arrow-right ml-2 text-blue-600 "></i> </Link>
                 </h1>
 
                 {/*div containing the cards and the arrows for the new arrival  */}
@@ -85,17 +90,17 @@ function Home() {
                 <div className=" m-5  flex h-full justify-evenly">
                     {/* left arrow */}
                     <div className="flex items-center justify-center ">
-                        <i className="bi bi-arrow-left "></i>
+                        <i className="bi bi-arrow-left "></i> 
                     </div>
 
                     {/* CARDs */}
 
-                    <div className=" flex overflow-hidden w-[90%]">
-                        <NewArrivalCard image={joggers} text="Knitted Joggers" />
-                        <NewArrivalCard image={sweaters} text="Styled Bags" />
-                        <NewArrivalCard image={tots} text="Structured Tots" />
-                        <NewArrivalCard image={clutches} text="Clutches" />
-                    </div>
+                   <Link to="/shop"> <div className=" flex overflow-hidden w-[90%]">
+                        <NewArrivalCard image={imgShop2} text="Bags" />
+                        <NewArrivalCard image={imgShop3} text="Shoes" />
+                        <NewArrivalCard image={imgShop7} text="Apparel" />
+                        <NewArrivalCard image={imgShop13} text="Accessories" />
+                    </div>  </Link>
                     {/* right arrow */}
                     <div className=" flex items-center justify-center">
                         <i className="bi bi-arrow-right "></i>

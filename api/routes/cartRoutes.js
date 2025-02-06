@@ -73,13 +73,26 @@
 
 // routes/cartRoutes.js
 import express from "express";
-import { getCart, addToCart, clearCart } from "../controllers/cart.controller.js";
+import { getCart, addToCart, removeFromCart, updateCartItem } from "../controllers/cart.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
+import User from "../models/user.model.js";
 
 const router = express.Router();
 
-router.get("/", verifyToken, getCart); // Fetch cart
-router.post("/add", verifyToken, addToCart); // Add item to cart
-router.delete("/clear", verifyToken, clearCart); // Clear cart
+// All cart endpoints require authentication
+router.get("/", verifyToken, getCart);
+router.post("/add", verifyToken, addToCart);
+router.put("/update", verifyToken, updateCartItem);
+router.delete("/remove/:productId", verifyToken, removeFromCart);
+router.post("/clear", verifyToken, async (req, res) => {
+    try {
+      const user = await User.findById(req.userId);
+      user.cart = { items: [] };
+      await user.save();
+      res.status(200).json({ message: "Cart cleared", cart: user.cart });
+    } catch (error) {
+      res.status(500).json({ message: "Error clearing cart" });
+    }
+  });
 
 export default router;

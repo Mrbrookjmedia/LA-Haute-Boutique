@@ -21,3 +21,17 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete user' });
   }
 };
+
+
+// controllers/user.controller.js
+export const getUserOrders = async (req, res) => {
+  try {
+    const userId = req.userId; // Extracted from verified token
+    // Fetch orders for the user (replace with actual database query)
+    const orders = []; // Example: await Order.find({ userId });
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching user orders:", error);
+    res.status(500).json({ message: "Failed to fetch orders" });
+  }
+};
