@@ -33,7 +33,7 @@ const UserPage = () => {
     if (currentUser) {
       fetchUserData();
     }
-  }, [currentUser, refreshUserData]);
+  }, [currentUser]);
 
   // Logout handler
   const handleLogout = async () => {

@@ -16,17 +16,19 @@
 
 // routes/product.routes.js
 import express from "express";
-import { createProduct, getProducts, getProductById } from "../controllers/product.controller.js";
+import { createProduct, getProducts, getProductById  , deleteProduct ,updateProduct} from "../controllers/product.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { admin } from "../middleware/admin.js";
 
 const router = express.Router();
 
 // Only an authenticated admin can create a product.
-router.post("/", verifyToken, admin, createProduct);
+router.post("/createproduct", verifyToken, admin, createProduct);
+router.delete("/:id", verifyToken, admin, deleteProduct);
+router.put("/:id", verifyToken, admin, updateProduct);
 
 // Public routes: listing and reading products.
-router.get("/", getProducts);
+router.get("/allproducts", getProducts);
 router.get("/:id", getProductById);
 
 export default router;
